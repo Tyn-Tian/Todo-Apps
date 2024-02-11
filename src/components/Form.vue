@@ -1,6 +1,11 @@
 <template>
   <div class="container bg-white shadow" id="add-todo">
-    <h2 class="container-header text-center">Tambah yang harus dilakukan</h2>
+    <h2 class="container-header text-center" v-if="bool">
+      Edit yang harus dilakukan
+    </h2>
+    <h2 class="container-header text-center" v-else>
+      Tambah yang harus dilakukan
+    </h2>
     <form class="form" action="#" id="form">
       <div class="form-group form-title">
         <label for="title">Masukkan hal yang akan dilakukan</label>
@@ -16,13 +21,27 @@
         <label for="date">Masukkan tanggal harus selesai</label>
         <input type="date" id="date" name="date" v-model="timestamp" required />
       </div>
-      <input
-        type="submit"
-        value="Submit"
-        name="Submit"
-        class="btn-submit"
-        @click.prevent="submit"
-      />
+      <div class="btn-container">
+        <button v-if="bool" class="btn-cancel" @click="btnCancel">
+          Cancel
+        </button>
+        <input
+          v-if="bool"
+          type="submit"
+          value="Edit"
+          name="Submit"
+          class="btn-submit"
+          @click.prevent="submit"
+        />
+        <input
+          v-else
+          type="submit"
+          value="Submit"
+          name="Submit"
+          class="btn-submit"
+          @click.prevent="submit"
+        />
+      </div>
     </form>
   </div>
 </template>
@@ -35,28 +54,47 @@ export default {
       timestamp: "",
     };
   },
+  props: {
+    bool: Boolean,
+    todoID: Number,
+  },
+  watch: {
+    bool() {
+      this.editInputValue();
+    },
+  },
   methods: {
     submit() {
-      // console.log(this.date.split("-").reverse().join("-"));
       this.addTodo();
-      this.saveData()
+      this.saveData();
 
-      this.textTodo = "";
-      this.timestamp = "";
+      this.editInputValue();
     },
     addTodo() {
-      const textTodo = this.textTodo;
-      const timestamp = this.timestamp.split("-").reverse().join("-");
+      if (!this.$store.state.isEdit) {
+        const textTodo = this.textTodo;
+        const timestamp = this.timestamp.split("-").reverse().join("-");
 
-      const generatedId = this.generateId();
-      const todoObject = this.generateTodoObject(
-        generatedId,
-        textTodo,
-        timestamp,
-        false
-      );
+        const generatedId = this.generateId();
+        const todoObject = this.generateTodoObject(
+          generatedId,
+          textTodo,
+          timestamp,
+          false
+        );
 
-      this.$store.state.todos.push(todoObject)
+        this.$store.state.todos.push(todoObject);
+      } else {
+        const todoTarget = this.findTodo(this.todoID);
+        const todoIndex = this.findTodoIndex(this.todoID);
+
+        todoTarget.task = this.textTodo;
+        todoTarget.timestamp = this.timestamp.split("-").reverse().join("-");
+
+        this.$store.commit("editTask", todoTarget, todoIndex);
+
+        this.$store.commit("changeEditBool");
+      }
     },
     generateId() {
       return +new Date();
@@ -70,8 +108,28 @@ export default {
       };
     },
     saveData() {
-      this.$store.getters.saveData
-    }
+      this.$store.getters.saveData;
+    },
+    findTodo(todoID) {
+      return this.$store.getters.findTodo(todoID);
+    },
+    findTodoIndex(todoID) {
+      return this.$store.getters.findTodoIndex(todoID);
+    },
+    editInputValue() {
+      if (this.bool) {
+        const todoData = this.findTodo(this.todoID);
+        this.textTodo = todoData.task;
+        this.timestamp = todoData.timestamp.split("-").reverse().join("-");
+      } else {
+        this.textTodo = "";
+        this.timestamp = "";
+      }
+    },
+    btnCancel() {
+      this.$store.commit("changeEditBool");
+      this.editInputValue();
+    },
   },
 };
 </script>
@@ -113,6 +171,15 @@ input[type="date"] {
   font-size: 24px;
 }
 
+.btn-container {
+  align-self: flex-end;
+}
+
+.btn-cancel {
+  margin-right: 16px;
+}
+
+.btn-cancel,
 .btn-submit {
   width: fit-content;
   font-family: Raleway, sans-serif;
@@ -122,10 +189,10 @@ input[type="date"] {
   color: black;
   font-size: 24px;
   margin-top: auto;
-  align-self: flex-end;
   cursor: pointer;
 }
 
+.btn-cancel:hover,
 .btn-submit:hover {
   background: #5f30e2;
   color: white;
@@ -133,6 +200,7 @@ input[type="date"] {
 
 input[type="text"],
 input[type="date"],
+.btn-cancel:focus,
 .btn-submit:focus {
   outline: none;
 }

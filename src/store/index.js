@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     todos: [],
+    isEdit: false
   },
   getters: {
     uncompletedTodos: state => {
@@ -57,6 +58,14 @@ export default createStore({
       if (todoTarget == -1) return
 
       state.todos.splice(todoTarget, 1)
+    },
+    changeEditBool: state => {
+      state.isEdit = !state.isEdit
+    },
+    editTask: (state, { todoTarget, todoIndex }) => {
+      if (todoTarget == undefined) return
+
+      todos.splice(todoIndex, 1, todoTarget)
     }
   },
   actions: {

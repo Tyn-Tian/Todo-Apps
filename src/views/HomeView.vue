@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <Form />
+    <Form :bool="this.$store.state.isEdit" :todoID="this.todoID"/>
 
     <TodoList>
       <h2 class="container-header">Yang harus dilakukan</h2>
@@ -10,6 +10,7 @@
             <h2>{{ todo.task }}</h2>
             <p>{{ todo.timestamp }}</p>
           </div>
+          <button class="edit-button" @click="editBtn(todo.id)"></button>
           <button class="check-button" @click="checkBtn(todo.id)"></button>
         </div>
       </div>
@@ -51,6 +52,11 @@ export default {
     Form,
     TodoList,
   },
+  data() {
+    return {
+      todoID: null
+    }
+  },
   computed: {
     todos() {
       return this.$store.getters.uncompletedTodos;
@@ -64,6 +70,10 @@ export default {
       const todoTarget = this.findTodo(todoID);
       this.$store.commit("addTaskToCompleted", todoTarget);
       this.saveData();
+    },
+    editBtn(todoID) {
+      this.$store.commit("changeEditBool");
+      this.todoID = todoID
     },
     undoBtn(todoID) {
       const todoTarget = this.findTodo(todoID);
@@ -126,7 +136,7 @@ export default {
 
   background: url("../assets/img/check-outline.svg");
   background-size: contain;
-  margin-left: auto;
+  margin-left: 16px;
   cursor: pointer;
   border: none;
 }
@@ -134,6 +144,17 @@ export default {
 .check-button:hover {
   background: url("../assets/img/check-solid.svg");
   background-size: contain;
+}
+
+.edit-button {
+  width: 40px;
+  height: 40px;
+
+  background: url("../assets/img/edit-solid.svg");
+  background-size: contain;
+  margin-left: auto;
+  cursor: pointer;
+  border: none;
 }
 
 .trash-button {
