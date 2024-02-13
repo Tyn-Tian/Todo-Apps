@@ -154,10 +154,6 @@ export default {
   font-weight: lighter;
 }
 
-.shadow {
-  box-shadow: 0 5px 10px rgba(154, 160, 185, 0.05),
-    0 15px 40px rgba(166, 173, 201, 0.2);
-}
 
 input[type="text"],
 input[type="date"] {
@@ -203,10 +199,6 @@ input[type="date"],
 .btn-cancel:focus,
 .btn-submit:focus {
   outline: none;
-}
-
-.text-center {
-  text-align: center;
 }
 
 .form-title {
