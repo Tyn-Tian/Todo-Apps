@@ -17,7 +17,7 @@ export default {
 
 <style scoped>
 .container {
-  padding-inline: 32px;
+  padding-inline: 32px !important;
 }
 
 input[type="search"] {
