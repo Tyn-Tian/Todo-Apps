@@ -13,6 +13,12 @@ export default createStore({
     completedTodos: state => {
       return state.todos.filter((todo) => todo.isCompleted)
     },
+    searchUncompletedTodos: state => searchInput => {
+      return state.todos.filter((todo) => todo.task.toLowerCase().includes(searchInput.toLowerCase()) && !todo.isCompleted)
+    },
+    searchCompletedTodos: state => searchInput => {
+      return state.todos.filter((todo) => todo.task.toLowerCase().includes(searchInput.toLowerCase()) && todo.isCompleted)
+    },
     findTodo: state => todoID => {
       return state.todos.find(todo => todo.id == todoID)
     },

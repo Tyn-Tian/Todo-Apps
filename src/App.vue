@@ -1,7 +1,7 @@
 <template>
   <header>
     <h1>TodoList</h1>
-    <button class="search-btn"></button>
+    <button class="search-btn" @click="searchBtn"></button>
   </header>
 
   <router-view />
@@ -9,6 +9,11 @@
 
 <script>
   export default {
+    methods: {
+      searchBtn() {
+        this.$store.commit("changeSearchBool")
+      }
+    }
   }
 </script>
 

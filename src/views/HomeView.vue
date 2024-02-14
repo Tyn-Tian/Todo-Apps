@@ -1,61 +1,67 @@
 <template>
   <div class="wrapper">
-    <Form :bool="this.$store.state.isEdit" :todoID="this.todoID"/>
+    <Search v-if="this.$store.state.isSearch" />
 
-    <TodoList>
-      <h2 class="container-header">Yang harus dilakukan</h2>
-      <div class="list-item" id="todos">
-        <div class="item shadow" v-for="todo in todos" :id="todo.id">
-          <div class="inner">
-            <h2>{{ todo.task }}</h2>
-            <p>{{ todo.timestamp }}</p>
-          </div>
-          <button class="edit-button" @click="editBtn(todo.id)"></button>
-          <button class="check-button" @click="checkBtn(todo.id)"></button>
-        </div>
-      </div>
-    </TodoList>
+    <Form :bool="this.$store.state.isEdit" :todoID="this.todoID" />
 
-    <TodoList>
-      <h2 class="container-header">Yang sudah dilakukan</h2>
-      <div class="list-item" id="completed-todos">
-        <div
-          class="item shadow"
-          v-for="completeTodo in completeTodos"
-          :id="completeTodo.id"
-        >
-          <div class="inner">
-            <h2>{{ completeTodo.task }}</h2>
-            <p>{{ completeTodo.timestamp }}</p>
+    <div v-if="!this.$store.state.isSearch">
+      <TodoList>
+        <h2 class="container-header">Yang harus dilakukan</h2>
+        <div class="list-item" id="todos">
+          <div class="item shadow" v-for="todo in todos" :id="todo.id">
+            <div class="inner">
+              <h2>{{ todo.task }}</h2>
+              <p>{{ todo.timestamp }}</p>
+            </div>
+            <button class="edit-button" @click="editBtn(todo.id)"></button>
+            <button class="check-button" @click="checkBtn(todo.id)"></button>
           </div>
-          <button
-            class="undo-button"
-            @click="undoBtn(completeTodo.id)"
-          ></button>
-          <button
-            class="trash-button"
-            @click="removeBtn(completeTodo.id)"
-          ></button>
         </div>
-      </div>
-    </TodoList>
+      </TodoList>
+
+      <TodoList>
+        <h2 class="container-header">Yang sudah dilakukan</h2>
+        <div class="list-item" id="completed-todos">
+          <div
+            class="item shadow"
+            v-for="completeTodo in completeTodos"
+            :id="completeTodo.id"
+          >
+            <div class="inner">
+              <h2>{{ completeTodo.task }}</h2>
+              <p>{{ completeTodo.timestamp }}</p>
+            </div>
+            <button
+              class="undo-button"
+              @click="undoBtn(completeTodo.id)"
+            ></button>
+            <button
+              class="trash-button"
+              @click="removeBtn(completeTodo.id)"
+            ></button>
+          </div>
+        </div>
+      </TodoList>
+    </div>
   </div>
 </template>
 
 <script>
 import Form from "../components/Form.vue";
 import TodoList from "../components/TodoList.vue";
+import Search from "../components/Search.vue";
 
 export default {
   name: "HomeView",
   components: {
     Form,
     TodoList,
+    Search,
   },
   data() {
     return {
-      todoID: null
-    }
+      todoID: null,
+    };
   },
   computed: {
     todos() {
@@ -73,7 +79,7 @@ export default {
     },
     editBtn(todoID) {
       this.$store.commit("changeEditBool");
-      this.todoID = todoID
+      this.todoID = todoID;
     },
     undoBtn(todoID) {
       const todoTarget = this.findTodo(todoID);
