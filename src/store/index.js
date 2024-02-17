@@ -32,23 +32,6 @@ export default createStore({
       }
       return true;
     },
-    saveData: (state, getters) => {
-      if (getters.isStorageExits) {
-        const parsed = JSON.stringify(state.todos)
-        localStorage.setItem('todos', parsed)
-      }
-    },
-    loadDataFromStorage: state => {
-      const serializedData = localStorage.getItem('todos')
-
-      let data = JSON.parse(serializedData)
-
-      if (data !== null) {
-        for (const todo of data) {
-          state.todos.push(todo)
-        }
-      }
-    },
   },
   mutations: {
     addTaskToCompleted: (state, todoTarget) => {
@@ -76,7 +59,22 @@ export default createStore({
     },
     changeSearchBool: state => {
       state.isSearch = !state.isSearch
-    }
+    },
+    saveData: (state) => {
+      const parsed = JSON.stringify(state.todos)
+      localStorage.setItem('todos', parsed)
+    },
+    loadDataFromStorage: state => {
+      const serializedData = localStorage.getItem('todos')
+
+      let data = JSON.parse(serializedData)
+
+      if (data !== null) {
+        for (const todo of data) {
+          state.todos.push(todo)
+        }
+      }
+    },
   },
   actions: {
   },
