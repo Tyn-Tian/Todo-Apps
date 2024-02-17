@@ -7,7 +7,7 @@ export default createStore({
     isSearch: false
   },
   getters: {
-    uncompletedTodos: state => {
+    allTodos: state => {
       return state.todos.filter((todo) => !todo.isCompleted)
     },
     completedTodos: state => {
