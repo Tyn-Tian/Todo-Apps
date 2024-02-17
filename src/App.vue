@@ -69,7 +69,7 @@ export default {
       todoID: null,
     };
   },
-  computed: mapGetters(["allTodos", "completedTodos"]),
+  computed: mapGetters(["allTodos", "completedTodos", "findTodo", "findTodoIndex"]),
   methods: {
     ...mapGetters(["isStorageExits"]),
     ...mapMutations([
@@ -105,12 +105,6 @@ export default {
       if (this.isStorageExits) {
         this.saveData();
       }
-    },
-    findTodo(todoID) {
-      return this.$store.getters.findTodo(todoID);
-    },
-    findTodoIndex(todoID) {
-      return this.$store.getters.findTodoIndex(todoID);
     },
   },
   beforeMount() {
