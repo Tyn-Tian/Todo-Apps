@@ -1,10 +1,14 @@
 <template>
   <div class="container">
-    <slot></slot>
+    <h2 class="container-header">{{ title }}</h2>
+    <div class="list-item" :id="listId">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["title", "listId"],
+};
 </script>
-
