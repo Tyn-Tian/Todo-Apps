@@ -13,7 +13,7 @@
       <TodoList>
         <h2 class="container-header">Yang harus dilakukan</h2>
         <div class="list-item" id="todos">
-          <div class="item shadow" v-for="todo in todos" :id="todo.id">
+          <div class="item shadow" v-for="todo in allTodos" :id="todo.id">
             <div class="inner">
               <h2>{{ todo.task }}</h2>
               <p>{{ todo.timestamp }}</p>
@@ -29,7 +29,7 @@
         <div class="list-item" id="completed-todos">
           <div
             class="item shadow"
-            v-for="completeTodo in completeTodos"
+            v-for="completeTodo in completedTodos"
             :id="completeTodo.id"
           >
             <div class="inner">
@@ -55,6 +55,7 @@
 import Form from "./components/Form.vue";
 import TodoList from "./components/TodoList.vue";
 import Search from "./components/Search.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "HomeView",
@@ -68,17 +69,10 @@ export default {
       todoID: null,
     };
   },
-  computed: {
-    todos() {
-      return this.$store.getters.uncompletedTodos;
-    },
-    completeTodos() {
-      return this.$store.getters.completedTodos;
-    },
-  },
+  computed: mapGetters(["allTodos", "completedTodos"]),
   methods: {
     searchBtn() {
-      this.$store.commit("changeSearchBool")
+      this.$store.commit("changeSearchBool");
     },
     checkBtn(todoID) {
       const todoTarget = this.findTodo(todoID);
