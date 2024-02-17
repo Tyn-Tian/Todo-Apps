@@ -55,7 +55,7 @@
 import Form from "./components/Form.vue";
 import TodoList from "./components/TodoList.vue";
 import Search from "./components/Search.vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "HomeView",
@@ -71,27 +71,40 @@ export default {
   },
   computed: mapGetters(["allTodos", "completedTodos"]),
   methods: {
+    ...mapGetters(["isStorageExits"]),
+    ...mapMutations([
+      "saveData",
+      "loadDataFromStorage",
+      "changeSearchBool",
+      "changeEditBool",
+    ]),
     searchBtn() {
-      this.$store.commit("changeSearchBool");
+      this.changeSearchBool();
     },
     checkBtn(todoID) {
       const todoTarget = this.findTodo(todoID);
       this.$store.commit("addTaskToCompleted", todoTarget);
-      this.saveData();
+      if (this.isStorageExits) {
+        this.saveData();
+      }
     },
     editBtn(todoID) {
-      this.$store.commit("changeEditBool");
+      this.changeEditBool();
       this.todoID = todoID;
     },
     undoBtn(todoID) {
       const todoTarget = this.findTodo(todoID);
       this.$store.commit("undoTaskFromCompleted", todoTarget);
-      this.saveData();
+      if (this.isStorageExits) {
+        this.saveData();
+      }
     },
     removeBtn(todoID) {
       const todoTarget = this.findTodoIndex(todoID);
       this.$store.commit("removeTaskFromCompleted", todoTarget);
-      this.saveData();
+      if (this.isStorageExits) {
+        this.saveData();
+      }
     },
     findTodo(todoID) {
       return this.$store.getters.findTodo(todoID);
@@ -99,15 +112,9 @@ export default {
     findTodoIndex(todoID) {
       return this.$store.getters.findTodoIndex(todoID);
     },
-    saveData() {
-      this.$store.getters.saveData;
-    },
-    loadDataFromStorage() {
-      this.$store.getters.loadDataFromStorage;
-    },
   },
   beforeMount() {
-    if (this.$store.getters.isStorageExits) {
+    if (this.isStorageExits) {
       this.loadDataFromStorage();
     }
   },
