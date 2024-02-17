@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
@@ -63,6 +65,7 @@ export default {
       this.editInputValue();
     },
   },
+  computed: mapGetters(["findTodo", "findTodoIndex"]),
   methods: {
     submit() {
       this.addTodo();
@@ -110,12 +113,6 @@ export default {
     saveData() {
       this.$store.getters.saveData;
     },
-    findTodo(todoID) {
-      return this.$store.getters.findTodo(todoID);
-    },
-    findTodoIndex(todoID) {
-      return this.$store.getters.findTodoIndex(todoID);
-    },
     editInputValue() {
       if (this.bool) {
         const todoData = this.findTodo(this.todoID);
@@ -153,7 +150,6 @@ export default {
   font-size: 18px;
   font-weight: lighter;
 }
-
 
 input[type="text"],
 input[type="date"] {
