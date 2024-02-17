@@ -68,7 +68,7 @@ export default {
   computed: mapGetters(["findTodo", "findTodoIndex"]),
   methods: {
     ...mapGetters(["isStorageExits"]),
-    ...mapMutations(["saveData"]),
+    ...mapMutations(["addTask", "saveData", "editTask", "changeEditBool"]),
     submit() {
       this.addTodo();
       if (this.isStorageExits) {
@@ -90,7 +90,7 @@ export default {
           false
         );
 
-        this.$store.state.todos.push(todoObject);
+        this.addTask(todoObject)
       } else {
         const todoTarget = this.findTodo(this.todoID);
         const todoIndex = this.findTodoIndex(this.todoID);
@@ -98,9 +98,9 @@ export default {
         todoTarget.task = this.textTodo;
         todoTarget.timestamp = this.timestamp.split("-").reverse().join("-");
 
-        this.$store.commit("editTask", todoTarget, todoIndex);
+        this.editTask(todoTarget, todoIndex)
 
-        this.$store.commit("changeEditBool");
+        this.changeEditBool()
       }
     },
     generateId() {
@@ -125,7 +125,7 @@ export default {
       }
     },
     btnCancel() {
-      this.$store.commit("changeEditBool");
+      this.changeEditBool()
       this.editInputValue();
     },
   },
