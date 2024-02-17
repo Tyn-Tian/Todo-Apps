@@ -69,21 +69,37 @@ export default {
       todoID: null,
     };
   },
-  computed: mapGetters(["allTodos", "completedTodos", "findTodo", "findTodoIndex"]),
+  computed: mapGetters([
+    "allTodos",
+    "completedTodos",
+    "findTodo",
+    "findTodoIndex",
+  ]),
   methods: {
     ...mapGetters(["isStorageExits"]),
     ...mapMutations([
+      "addTaskToCompleted",
+      "undoTaskFromCompleted",
+      "removeTaskFromCompleted",
+      "changeEditBool",
       "saveData",
       "loadDataFromStorage",
       "changeSearchBool",
-      "changeEditBool",
     ]),
-    searchBtn() {
-      this.changeSearchBool();
-    },
     checkBtn(todoID) {
-      const todoTarget = this.findTodo(todoID);
-      this.$store.commit("addTaskToCompleted", todoTarget);
+      this.addTaskToCompleted(this.findTodo(todoID));
+      if (this.isStorageExits) {
+        this.saveData();
+      }
+    },
+    undoBtn(todoID) {
+      this.undoTaskFromCompleted(this.findTodo(todoID))
+      if (this.isStorageExits) {
+        this.saveData();
+      }
+    },
+    removeBtn(todoID) {
+      this.removeTaskFromCompleted(this.findTodoIndex(todoID))
       if (this.isStorageExits) {
         this.saveData();
       }
@@ -92,19 +108,8 @@ export default {
       this.changeEditBool();
       this.todoID = todoID;
     },
-    undoBtn(todoID) {
-      const todoTarget = this.findTodo(todoID);
-      this.$store.commit("undoTaskFromCompleted", todoTarget);
-      if (this.isStorageExits) {
-        this.saveData();
-      }
-    },
-    removeBtn(todoID) {
-      const todoTarget = this.findTodoIndex(todoID);
-      this.$store.commit("removeTaskFromCompleted", todoTarget);
-      if (this.isStorageExits) {
-        this.saveData();
-      }
+    searchBtn() {
+      this.changeSearchBool();
     },
   },
   beforeMount() {
