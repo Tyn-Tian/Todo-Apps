@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   data() {
@@ -67,9 +67,13 @@ export default {
   },
   computed: mapGetters(["findTodo", "findTodoIndex"]),
   methods: {
+    ...mapGetters(["isStorageExits"]),
+    ...mapMutations(["saveData"]),
     submit() {
       this.addTodo();
-      this.saveData();
+      if (this.isStorageExits) {
+        this.saveData();
+      }
 
       this.editInputValue();
     },
@@ -109,9 +113,6 @@ export default {
         timestamp,
         isCompleted,
       };
-    },
-    saveData() {
-      this.$store.getters.saveData;
     },
     editInputValue() {
       if (this.bool) {
