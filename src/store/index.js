@@ -34,6 +34,9 @@ export default createStore({
     },
   },
   mutations: {
+    addTask: (state, todoObject) => {
+      state.todos.unshift(todoObject)
+    },
     addTaskToCompleted: (state, todoTarget) => {
       if (todoTarget == undefined) return
 
