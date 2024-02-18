@@ -14,7 +14,7 @@
         <h2>{{ todo.task }}</h2>
         <p>{{ todo.timestamp }}</p>
       </div>
-      <button class="check-button" @click="checkBtn(todo.id)"></button>
+      <button class="check-button" @click="addTaskToCompleted(findTodo(todo.id))"></button>
     </div>
   </TodoList>
 
@@ -28,15 +28,15 @@
         <h2>{{ completeTodo.task }}</h2>
         <p>{{ completeTodo.timestamp }}</p>
       </div>
-      <button class="undo-button" @click="undoBtn(completeTodo.id)"></button>
-      <button class="trash-button" @click="removeBtn(completeTodo.id)"></button>
+      <button class="undo-button" @click="undoTaskFromCompleted(findTodo(completeTodo.id))"></button>
+      <button class="trash-button" @click="removeTaskFromCompleted(findTodoIndex(completeTodo.id))"></button>
     </div>
   </TodoList>
 </template>
 
 <script>
 import TodoList from "./TodoList.vue";
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   components: {
@@ -57,32 +57,11 @@ export default {
     },
   },
   methods: {
-    ...mapGetters(["isStorageExits"]),
-    ...mapMutations([
+    ...mapActions([
       "addTaskToCompleted",
       "undoTaskFromCompleted",
       "removeTaskFromCompleted",
-      "changeEditBool",
-      "saveData",
     ]),
-    checkBtn(todoID) {
-      this.addTaskToCompleted(this.findTodo(todoID));
-      if (this.isStorageExits) {
-        this.saveData();
-      }
-    },
-    undoBtn(todoID) {
-      this.undoTaskFromCompleted(this.findTodo(todoID));
-      if (this.isStorageExits) {
-        this.saveData();
-      }
-    },
-    removeBtn(todoID) {
-      this.removeTaskFromCompleted(this.findTodoIndex(todoID));
-      if (this.isStorageExits) {
-        this.saveData();
-      }
-    },
   },
 };
 </script>
