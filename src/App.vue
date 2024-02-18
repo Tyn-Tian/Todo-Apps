@@ -70,7 +70,6 @@ export default {
     "findTodoIndex",
   ]),
   methods: {
-    ...mapGetters(["isStorageExits"]),
     ...mapMutations([
       "addTaskToCompleted",
       "undoTaskFromCompleted",
@@ -82,21 +81,15 @@ export default {
     ]),
     checkBtn(todoID) {
       this.addTaskToCompleted(this.findTodo(todoID));
-      if (this.isStorageExits) {
-        this.saveData();
-      }
+      this.saveData()
     },
     undoBtn(todoID) {
       this.undoTaskFromCompleted(this.findTodo(todoID));
-      if (this.isStorageExits) {
-        this.saveData();
-      }
+      this.saveData()
     },
     removeBtn(todoID) {
       this.removeTaskFromCompleted(this.findTodoIndex(todoID));
-      if (this.isStorageExits) {
-        this.saveData();
-      }
+      this.saveData()
     },
     editBtn(todoID) {
       this.changeEditBool();
@@ -107,9 +100,7 @@ export default {
     },
   },
   beforeMount() {
-    if (this.isStorageExits) {
-      this.loadDataFromStorage();
-    }
+    this.loadDataFromStorage()
   },
 };
 </script>
