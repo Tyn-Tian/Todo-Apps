@@ -59,13 +59,13 @@ export default createStore({
       state.isSearch = !state.isSearch
     },
     saveData: (state) => {
-      if (isStorageAvailable) {
+      if (isStorageAvailable()) {
         const parsed = JSON.stringify(state.todos)
         localStorage.setItem('todos', parsed)
       }
     },
     loadDataFromStorage: state => {
-      if (isStorageAvailable) {
+      if (isStorageAvailable()) {
         const serializedData = localStorage.getItem('todos')
 
         let data = JSON.parse(serializedData)

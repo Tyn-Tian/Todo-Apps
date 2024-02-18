@@ -1,6 +1,6 @@
-export default function isStorageAvailable() {
+export function isStorageAvailable() {
     if (typeof Storage === undefined) {
-        alert("Browsur kamu tidak mendukung local storage");
+        alert("Browser Anda tidak mendukung local storage");
         return false;
     }
     return true;
