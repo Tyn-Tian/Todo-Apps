@@ -1,5 +1,7 @@
 import { createStore } from 'vuex'
 
+import { isStorageAvailable } from '../utils/index'
+
 export default createStore({
   state: {
     todos: [],
@@ -24,13 +26,6 @@ export default createStore({
     },
     findTodoIndex: state => todoID => {
       return state.todos.findIndex(todo => todo.id == todoID)
-    },
-    isStorageExits: state => {
-      if (typeof Storage === undefined) {
-        alert("Browsur kamu tidak mendukung local storage");
-        return false;
-      }
-      return true;
     },
   },
   mutations: {
@@ -64,17 +59,21 @@ export default createStore({
       state.isSearch = !state.isSearch
     },
     saveData: (state) => {
-      const parsed = JSON.stringify(state.todos)
-      localStorage.setItem('todos', parsed)
+      if (isStorageAvailable) {
+        const parsed = JSON.stringify(state.todos)
+        localStorage.setItem('todos', parsed)
+      }
     },
     loadDataFromStorage: state => {
-      const serializedData = localStorage.getItem('todos')
+      if (isStorageAvailable) {
+        const serializedData = localStorage.getItem('todos')
 
-      let data = JSON.parse(serializedData)
+        let data = JSON.parse(serializedData)
 
-      if (data !== null) {
-        for (const todo of data) {
-          state.todos.push(todo)
+        if (data !== null) {
+          for (const todo of data) {
+            state.todos.push(todo)
+          }
         }
       }
     },
