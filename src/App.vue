@@ -1,7 +1,7 @@
 <template>
   <header>
     <h1>TodoList</h1>
-    <button class="search-btn" @click="searchBtn"></button>
+    <button class="search-btn" @click="changeSearchBool"></button>
   </header>
 
   <div class="wrapper">
@@ -17,7 +17,10 @@
             <p>{{ todo.timestamp }}</p>
           </div>
           <button class="edit-button" @click="editBtn(todo.id)"></button>
-          <button class="check-button" @click="checkBtn(todo.id)"></button>
+          <button
+            class="check-button"
+            @click="addTaskToCompleted(findTodo(todo.id))"
+          ></button>
         </div>
       </TodoList>
 
@@ -33,11 +36,11 @@
           </div>
           <button
             class="undo-button"
-            @click="undoBtn(completeTodo.id)"
+            @click="undoTaskFromCompleted(findTodo(completeTodo.id))"
           ></button>
           <button
             class="trash-button"
-            @click="removeBtn(completeTodo.id)"
+            @click="removeTaskFromCompleted(findTodoIndex(completeTodo.id))"
           ></button>
         </div>
       </TodoList>
@@ -49,7 +52,7 @@
 import Form from "./components/Form.vue";
 import TodoList from "./components/TodoList.vue";
 import Search from "./components/Search.vue";
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "HomeView",
@@ -70,37 +73,23 @@ export default {
     "findTodoIndex",
   ]),
   methods: {
-    ...mapMutations([
+    ...mapActions([
       "addTaskToCompleted",
       "undoTaskFromCompleted",
       "removeTaskFromCompleted",
+    ]),
+    ...mapMutations([
       "changeEditBool",
-      "saveData",
       "loadDataFromStorage",
       "changeSearchBool",
     ]),
-    checkBtn(todoID) {
-      this.addTaskToCompleted(this.findTodo(todoID));
-      this.saveData()
-    },
-    undoBtn(todoID) {
-      this.undoTaskFromCompleted(this.findTodo(todoID));
-      this.saveData()
-    },
-    removeBtn(todoID) {
-      this.removeTaskFromCompleted(this.findTodoIndex(todoID));
-      this.saveData()
-    },
     editBtn(todoID) {
       this.changeEditBool();
       this.todoID = todoID;
     },
-    searchBtn() {
-      this.changeSearchBool();
-    },
   },
   beforeMount() {
-    this.loadDataFromStorage()
+    this.loadDataFromStorage();
   },
 };
 </script>
