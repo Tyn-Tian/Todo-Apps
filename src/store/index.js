@@ -79,6 +79,18 @@ export default createStore({
     },
   },
   actions: {
+    addTaskToCompleted: ({ commit }, todoTarget) => {
+      commit('addTaskToCompleted', todoTarget)
+      commit('saveData')
+    },
+    undoTaskFromCompleted: ({ commit }, todoTarget) => {
+      commit('undoTaskFromCompleted', todoTarget)
+      commit('saveData')
+    },
+    removeTaskFromCompleted: ({ commit }, todoTarget) => {
+      commit('removeTaskFromCompleted', todoTarget)
+      commit('saveData')
+    }
   },
   modules: {
   }
