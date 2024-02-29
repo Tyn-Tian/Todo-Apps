@@ -9,42 +9,40 @@
 
     <Form :bool="this.$store.state.isEdit" :todoID="this.$store.state.todoID" />
 
-    <div v-if="!this.$store.state.isSearch">
-      <TodoList title="Yang harus dilakukan" listId="todos">
-        <div class="item shadow" v-for="todo in allTodos" :id="todo.id">
-          <div class="inner">
-            <h2>{{ todo.task }}</h2>
-            <p>{{ todo.timestamp }}</p>
-          </div>
-          <button class="edit-button" @click="editBtn(todo.id)"></button>
-          <button
-            class="check-button"
-            @click="addTaskToCompleted(findTodo(todo.id))"
-          ></button>
+    <TodoList title="Yang harus dilakukan" listId="todos" v-show="!this.$store.state.isSearch">
+      <div class="item shadow" v-for="todo in allTodos" :id="todo.id">
+        <div class="inner">
+          <h2>{{ todo.task }}</h2>
+          <p>{{ todo.timestamp }}</p>
         </div>
-      </TodoList>
+        <button class="edit-button" @click="editBtn(todo.id)"></button>
+        <button
+          class="check-button"
+          @click="addTaskToCompleted(findTodo(todo.id))"
+        ></button>
+      </div>
+    </TodoList>
 
-      <TodoList title="Yang sudah dilakukan" listId="completed-todos">
-        <div
-          class="item shadow"
-          v-for="completeTodo in completedTodos"
-          :id="completeTodo.id"
-        >
-          <div class="inner">
-            <h2>{{ completeTodo.task }}</h2>
-            <p>{{ completeTodo.timestamp }}</p>
-          </div>
-          <button
-            class="undo-button"
-            @click="undoTaskFromCompleted(findTodo(completeTodo.id))"
-          ></button>
-          <button
-            class="trash-button"
-            @click="removeTaskFromCompleted(findTodoIndex(completeTodo.id))"
-          ></button>
+    <TodoList title="Yang sudah dilakukan" listId="completed-todos" v-show="!this.$store.state.isSearch">
+      <div
+        class="item shadow"
+        v-for="completeTodo in completedTodos"
+        :id="completeTodo.id"
+      >
+        <div class="inner">
+          <h2>{{ completeTodo.task }}</h2>
+          <p>{{ completeTodo.timestamp }}</p>
         </div>
-      </TodoList>
-    </div>
+        <button
+          class="undo-button"
+          @click="undoTaskFromCompleted(findTodo(completeTodo.id))"
+        ></button>
+        <button
+          class="trash-button"
+          @click="removeTaskFromCompleted(findTodoIndex(completeTodo.id))"
+        ></button>
+      </div>
+    </TodoList>
   </div>
 </template>
 
@@ -80,7 +78,7 @@ export default {
     ]),
     editBtn(todoID) {
       this.changeEditBool();
-      this.$store.commit('changeTodoID', todoID)
+      this.$store.commit("changeTodoID", todoID);
     },
   },
   beforeMount() {
@@ -113,6 +111,7 @@ header {
 .wrapper {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
