@@ -6,7 +6,8 @@ export default createStore({
   state: {
     todos: [],
     isEdit: false,
-    isSearch: false
+    isSearch: false,
+    todoID: null,
   },
   getters: {
     allTodos: state => {
@@ -57,6 +58,9 @@ export default createStore({
     },
     changeSearchBool: state => {
       state.isSearch = !state.isSearch
+    },
+    changeTodoID: (state, value) => {
+      state.todoID = value
     },
     saveData: (state) => {
       if (isStorageAvailable()) {

@@ -7,7 +7,7 @@
   <div class="wrapper">
     <Search v-if="this.$store.state.isSearch" />
 
-    <Form :bool="this.$store.state.isEdit" :todoID="this.todoID" />
+    <Form :bool="this.$store.state.isEdit" :todoID="this.$store.state.todoID" />
 
     <div v-if="!this.$store.state.isSearch">
       <TodoList title="Yang harus dilakukan" listId="todos">
@@ -61,11 +61,6 @@ export default {
     TodoList,
     Search,
   },
-  data() {
-    return {
-      todoID: null,
-    };
-  },
   computed: mapGetters([
     "allTodos",
     "completedTodos",
@@ -85,7 +80,7 @@ export default {
     ]),
     editBtn(todoID) {
       this.changeEditBool();
-      this.todoID = todoID;
+      this.$store.commit('changeTodoID', todoID)
     },
   },
   beforeMount() {
