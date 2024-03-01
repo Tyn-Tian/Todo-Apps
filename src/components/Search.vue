@@ -14,7 +14,7 @@
         <h2>{{ todo.task }}</h2>
         <p>{{ todo.timestamp }}</p>
       </div>
-      <button class="edit-button" @click="editBtn(todo.id)"></button>
+      <button class="edit-button" @click="editTask(todo.id)"></button>
       <button
         class="check-button"
         @click="addTaskToCompleted(findTodo(todo.id))"
@@ -46,7 +46,7 @@
 
 <script>
 import TodoList from "./TodoList.vue";
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
@@ -71,14 +71,8 @@ export default {
       "addTaskToCompleted",
       "undoTaskFromCompleted",
       "removeTaskFromCompleted",
+      "editTask",
     ]),
-    ...mapMutations([
-      "changeEditBool"
-    ]),
-    editBtn(todoID) {
-      this.changeEditBool();
-      this.$store.commit("changeTodoID", todoID);
-    },
   },
 };
 </script>

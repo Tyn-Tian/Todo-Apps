@@ -19,7 +19,7 @@
           <h2>{{ todo.task }}</h2>
           <p>{{ todo.timestamp }}</p>
         </div>
-        <button class="edit-button" @click="editBtn(todo.id)"></button>
+        <button class="edit-button" @click="editTask(todo.id)"></button>
         <button
           class="check-button"
           @click="addTaskToCompleted(findTodo(todo.id))"
@@ -78,16 +78,9 @@ export default {
       "addTaskToCompleted",
       "undoTaskFromCompleted",
       "removeTaskFromCompleted",
+      "editTask",
     ]),
-    ...mapMutations([
-      "changeEditBool",
-      "loadDataFromStorage",
-      "changeSearchBool",
-    ]),
-    editBtn(todoID) {
-      this.changeEditBool();
-      this.$store.commit("changeTodoID", todoID);
-    },
+    ...mapMutations(["loadDataFromStorage", "changeSearchBool"]),
   },
   beforeMount() {
     this.loadDataFromStorage();
