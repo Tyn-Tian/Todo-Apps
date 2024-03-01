@@ -9,7 +9,11 @@
 
     <Form :bool="this.$store.state.isEdit" :todoID="this.$store.state.todoID" />
 
-    <TodoList title="Yang harus dilakukan" listId="todos" v-show="!this.$store.state.isSearch">
+    <TodoList
+      title="Yang harus dilakukan"
+      listId="todos"
+      v-show="!this.$store.state.isSearch"
+    >
       <div class="item shadow" v-for="todo in allTodos" :id="todo.id">
         <div class="inner">
           <h2>{{ todo.task }}</h2>
@@ -23,7 +27,11 @@
       </div>
     </TodoList>
 
-    <TodoList title="Yang sudah dilakukan" listId="completed-todos" v-show="!this.$store.state.isSearch">
+    <TodoList
+      title="Yang sudah dilakukan"
+      listId="completed-todos"
+      v-show="!this.$store.state.isSearch"
+    >
       <div
         class="item shadow"
         v-for="completeTodo in completedTodos"
