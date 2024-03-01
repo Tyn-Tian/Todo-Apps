@@ -14,7 +14,11 @@
         <h2>{{ todo.task }}</h2>
         <p>{{ todo.timestamp }}</p>
       </div>
-      <button class="check-button" @click="addTaskToCompleted(findTodo(todo.id))"></button>
+      <button class="edit-button" @click="editBtn(todo.id)"></button>
+      <button
+        class="check-button"
+        @click="addTaskToCompleted(findTodo(todo.id))"
+      ></button>
     </div>
   </TodoList>
 
@@ -28,8 +32,14 @@
         <h2>{{ completeTodo.task }}</h2>
         <p>{{ completeTodo.timestamp }}</p>
       </div>
-      <button class="undo-button" @click="undoTaskFromCompleted(findTodo(completeTodo.id))"></button>
-      <button class="trash-button" @click="removeTaskFromCompleted(findTodoIndex(completeTodo.id))"></button>
+      <button
+        class="undo-button"
+        @click="undoTaskFromCompleted(findTodo(completeTodo.id))"
+      ></button>
+      <button
+        class="trash-button"
+        @click="removeTaskFromCompleted(findTodoIndex(completeTodo.id))"
+      ></button>
     </div>
   </TodoList>
 </template>
@@ -62,6 +72,13 @@ export default {
       "undoTaskFromCompleted",
       "removeTaskFromCompleted",
     ]),
+    ...mapMutations([
+      "changeEditBool"
+    ]),
+    editBtn(todoID) {
+      this.changeEditBool();
+      this.$store.commit("changeTodoID", todoID);
+    },
   },
 };
 </script>
@@ -85,7 +102,7 @@ input[type="search"] {
   outline: none;
 }
 
-.check-button {
+.edit-button {
   margin-left: auto;
 }
 </style>
