@@ -94,6 +94,10 @@ export default createStore({
     removeTaskFromCompleted: ({ commit }, todoTarget) => {
       commit('removeTaskFromCompleted', todoTarget)
       commit('saveData')
+    },
+    editTask: ({ commit }, todoID) => {
+      commit('changeEditBool')
+      commit('changeTodoID', todoID)
     }
   },
   modules: {
