@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from "vuex";
+
 export default {
   data() {
     return {
@@ -63,10 +65,15 @@ export default {
       this.editInputValue();
     },
   },
+  computed: mapGetters(["findTodo", "findTodoIndex"]),
   methods: {
+    ...mapGetters(["isStorageExits"]),
+    ...mapMutations(["addTask", "saveData", "editTask", "changeEditBool"]),
     submit() {
       this.addTodo();
-      this.saveData();
+      if (this.isStorageExits) {
+        this.saveData();
+      }
 
       this.editInputValue();
     },
@@ -83,7 +90,7 @@ export default {
           false
         );
 
-        this.$store.state.todos.push(todoObject);
+        this.addTask(todoObject)
       } else {
         const todoTarget = this.findTodo(this.todoID);
         const todoIndex = this.findTodoIndex(this.todoID);
@@ -91,9 +98,9 @@ export default {
         todoTarget.task = this.textTodo;
         todoTarget.timestamp = this.timestamp.split("-").reverse().join("-");
 
-        this.$store.commit("editTask", todoTarget, todoIndex);
+        this.editTask(todoTarget, todoIndex)
 
-        this.$store.commit("changeEditBool");
+        this.changeEditBool()
       }
     },
     generateId() {
@@ -107,15 +114,6 @@ export default {
         isCompleted,
       };
     },
-    saveData() {
-      this.$store.getters.saveData;
-    },
-    findTodo(todoID) {
-      return this.$store.getters.findTodo(todoID);
-    },
-    findTodoIndex(todoID) {
-      return this.$store.getters.findTodoIndex(todoID);
-    },
     editInputValue() {
       if (this.bool) {
         const todoData = this.findTodo(this.todoID);
@@ -127,7 +125,7 @@ export default {
       }
     },
     btnCancel() {
-      this.$store.commit("changeEditBool");
+      this.changeEditBool()
       this.editInputValue();
     },
   },
@@ -153,7 +151,6 @@ export default {
   font-size: 18px;
   font-weight: lighter;
 }
-
 
 input[type="text"],
 input[type="date"] {

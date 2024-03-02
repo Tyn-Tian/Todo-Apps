@@ -1,13 +1,16 @@
 import { createStore } from 'vuex'
 
+import { isStorageAvailable } from '../utils/index'
+
 export default createStore({
   state: {
     todos: [],
     isEdit: false,
-    isSearch: false
+    isSearch: false,
+    todoID: null,
   },
   getters: {
-    uncompletedTodos: state => {
+    allTodos: state => {
       return state.todos.filter((todo) => !todo.isCompleted)
     },
     completedTodos: state => {
@@ -25,32 +28,11 @@ export default createStore({
     findTodoIndex: state => todoID => {
       return state.todos.findIndex(todo => todo.id == todoID)
     },
-    isStorageExits: state => {
-      if (typeof Storage === undefined) {
-        alert("Browsur kamu tidak mendukung local storage");
-        return false;
-      }
-      return true;
-    },
-    saveData: (state, getters) => {
-      if (getters.isStorageExits) {
-        const parsed = JSON.stringify(state.todos)
-        localStorage.setItem('todos', parsed)
-      }
-    },
-    loadDataFromStorage: state => {
-      const serializedData = localStorage.getItem('todos')
-
-      let data = JSON.parse(serializedData)
-
-      if (data !== null) {
-        for (const todo of data) {
-          state.todos.push(todo)
-        }
-      }
-    },
   },
   mutations: {
+    addTask: (state, todoObject) => {
+      state.todos.unshift(todoObject)
+    },
     addTaskToCompleted: (state, todoTarget) => {
       if (todoTarget == undefined) return
 
@@ -76,9 +58,47 @@ export default createStore({
     },
     changeSearchBool: state => {
       state.isSearch = !state.isSearch
-    }
+    },
+    changeTodoID: (state, value) => {
+      state.todoID = value
+    },
+    saveData: (state) => {
+      if (isStorageAvailable()) {
+        const parsed = JSON.stringify(state.todos)
+        localStorage.setItem('todos', parsed)
+      }
+    },
+    loadDataFromStorage: state => {
+      if (isStorageAvailable()) {
+        const serializedData = localStorage.getItem('todos')
+
+        let data = JSON.parse(serializedData)
+
+        if (data !== null) {
+          for (const todo of data) {
+            state.todos.push(todo)
+          }
+        }
+      }
+    },
   },
   actions: {
+    addTaskToCompleted: ({ commit }, todoTarget) => {
+      commit('addTaskToCompleted', todoTarget)
+      commit('saveData')
+    },
+    undoTaskFromCompleted: ({ commit }, todoTarget) => {
+      commit('undoTaskFromCompleted', todoTarget)
+      commit('saveData')
+    },
+    removeTaskFromCompleted: ({ commit }, todoTarget) => {
+      commit('removeTaskFromCompleted', todoTarget)
+      commit('saveData')
+    },
+    editTask: ({ commit }, todoID) => {
+      commit('changeEditBool')
+      commit('changeTodoID', todoID)
+    }
   },
   modules: {
   }

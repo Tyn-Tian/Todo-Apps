@@ -3,42 +3,50 @@
     <h2 class="container-header text-center">Cari task yang diinginkan</h2>
     <input type="search" id="search" name="search" v-model="search" />
   </div>
-  
-  <TodoList>
-    <h2 class="container-header">Yang harus dilakukan</h2>
-    <div class="list-item" id="todos">
-      <div
-        class="item shadow"
-        v-for="todo in searchUncompletedTodos"
-        :id="todo.id"
-      >
-        <div class="inner">
-          <h2>{{ todo.task }}</h2>
-          <p>{{ todo.timestamp }}</p>
-        </div>
+
+  <TodoList title="Yang harus dilakukan" listId="todos">
+    <div
+      class="item shadow"
+      v-for="todo in searchUncompletedTodos"
+      :id="todo.id"
+    >
+      <div class="inner">
+        <h2>{{ todo.task }}</h2>
+        <p>{{ todo.timestamp }}</p>
       </div>
+      <button class="edit-button" @click="editTask(todo.id)"></button>
+      <button
+        class="check-button"
+        @click="addTaskToCompleted(findTodo(todo.id))"
+      ></button>
     </div>
   </TodoList>
 
-  <TodoList>
-    <h2 class="container-header">Yang sudah dilakukan</h2>
-    <div class="list-item" id="completed-todos">
-      <div
-        class="item shadow"
-        v-for="completeTodo in searchCompletedTodos"
-        :id="completeTodo.id"
-      >
-        <div class="inner">
-          <h2>{{ completeTodo.task }}</h2>
-          <p>{{ completeTodo.timestamp }}</p>
-        </div>
+  <TodoList title="Yang sudah dilakukan" listId="completed-todos">
+    <div
+      class="item shadow"
+      v-for="completeTodo in searchCompletedTodos"
+      :id="completeTodo.id"
+    >
+      <div class="inner">
+        <h2>{{ completeTodo.task }}</h2>
+        <p>{{ completeTodo.timestamp }}</p>
       </div>
+      <button
+        class="undo-button"
+        @click="undoTaskFromCompleted(findTodo(completeTodo.id))"
+      ></button>
+      <button
+        class="trash-button"
+        @click="removeTaskFromCompleted(findTodoIndex(completeTodo.id))"
+      ></button>
     </div>
   </TodoList>
 </template>
 
 <script>
 import TodoList from "./TodoList.vue";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
@@ -50,12 +58,21 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["findTodo", "findTodoIndex"]),
     searchUncompletedTodos() {
       return this.$store.getters.searchUncompletedTodos(this.search);
     },
     searchCompletedTodos() {
       return this.$store.getters.searchCompletedTodos(this.search);
     },
+  },
+  methods: {
+    ...mapActions([
+      "addTaskToCompleted",
+      "undoTaskFromCompleted",
+      "removeTaskFromCompleted",
+      "editTask",
+    ]),
   },
 };
 </script>
@@ -77,5 +94,9 @@ input[type="search"] {
   font-size: 24px;
 
   outline: none;
+}
+
+.edit-button {
+  margin-left: auto;
 }
 </style>
