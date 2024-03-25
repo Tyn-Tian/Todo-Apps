@@ -101,7 +101,6 @@ header {
 .search-btn {
   width: 30px;
   height: 30px;
-
   background: url(./assets/img/search-outline.svg);
   background-size: contain;
   margin-left: 16px;
@@ -136,7 +135,6 @@ header {
 .check-button {
   width: 40px;
   height: 40px;
-
   background: url("./assets/img/check-outline.svg");
   background-size: contain;
   margin-left: 16px;
@@ -152,7 +150,6 @@ header {
 .edit-button {
   width: 40px;
   height: 40px;
-
   background: url("./assets/img/edit-solid.svg");
   background-size: contain;
   margin-left: auto;
@@ -163,7 +160,6 @@ header {
 .trash-button {
   width: 40px;
   height: 40px;
-
   background: url("./assets/img/trash-outline.svg");
   background-size: contain;
   margin-left: 16px;
@@ -179,7 +175,6 @@ header {
 .undo-button {
   width: 40px;
   height: 40px;
-
   background: url("./assets/img/undo-ouline.svg");
   background-size: contain;
   margin-left: auto;

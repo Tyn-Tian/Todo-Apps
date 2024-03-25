@@ -92,7 +92,6 @@ input[type="search"] {
   box-sizing: border-box;
   margin-bottom: 8px;
   font-size: 24px;
-
   outline: none;
 }
 
